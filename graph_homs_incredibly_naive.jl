@@ -17,6 +17,19 @@ function check_hom(A::AbstractMatrix{Bool}, B::AbstractMatrix{Bool}, edgelist::V
     return true
 end
 
+function check_strong_hom(A::AbstractMatrix{Bool}, B::AbstractMatrix{Bool}, edgelist::Vector{Int}, mapping::Vector{Int})
+    for i in eachindex(edgelist)
+        for j in eachindex(mapping)
+            if A[i,j] && B[mapping[i], mapping[j]]
+                continue
+            elseif A[i,j] != B[mapping[i], mapping[j]]
+                return false
+            end
+        end
+    end
+    return true
+end
+
 function count_hom(A::AbstractMatrix{Bool}, B::AbstractMatrix{Bool})
     rows_A = size(A,1)
     rows_B = size(B,1)
@@ -34,30 +47,55 @@ function count_hom(A::AbstractMatrix{Bool}, B::AbstractMatrix{Bool})
     return counter
 end
 
-A = [
-    false true false;
-    false false true;
-    false false false
+G = Bool[
+    0 1 1 0;
+    0 0 1 0;
+    0 0 0 0;
+    0 0 0 0
 ]
 
-B = [
-    false true;
-    true false
+H = Bool[
+    0 1 1;
+    0 0 1;
+    0 0 0
 ]
 
-
-G = [
-    false true  true  false;
-    false false false true;
-    false false false true;
-    false false false false
+K4 = Bool[
+    0 1 1 1;
+    1 0 1 1;
+    1 1 0 1;
+    1 1 1 0
 ]
 
-H = [
-    false true  false false;
-    true  false true  false;
-    false true  false true;
-    false false true  false
+K3 = Bool[
+    0 1 1; 
+    1 0 1;
+    1 1 0
 ]
 
-count_hom(H,G)
+K2 = Bool[
+    0 1;
+    1 0;
+]
+
+K1 = fill(false, 1, 1)
+
+P1 = Bool[
+    0 1;
+    0 0
+]
+
+P2 = Bool[
+    0 1 0;
+    0 0 1;
+    0 0 0
+]
+
+P3 = Bool[
+    0 1 0 0;
+    0 0 1 0;
+    0 0 0 1;
+    0 0 0 0
+]
+
+count_hom(K2,K2)
